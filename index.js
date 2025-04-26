@@ -7,8 +7,10 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Firebase Admin SDK
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: admin.credential.cert(serviceAccount)
 });
 const db = admin.firestore();
 
