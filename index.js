@@ -7,10 +7,13 @@ app.use(cors());
 app.use(express.json());
 
 // Load Firebase Admin credentials from environment variable
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+const rawServiceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+
+// 🔥 Important fix: replace \\n with real line breaks
+rawServiceAccount.private_key = rawServiceAccount.private_key.replace(/\\n/g, '\n');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(rawServiceAccount)
 });
 
 const db = admin.firestore();
