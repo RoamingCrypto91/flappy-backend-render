@@ -6,12 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Initialize Firebase Admin SDK
+// Load Firebase Admin credentials from environment variable
 const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+
 const db = admin.firestore();
 
 // Submit Score Endpoint
