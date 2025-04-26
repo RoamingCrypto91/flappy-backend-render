@@ -20,16 +20,22 @@ const db = admin.firestore();
 
 // Submit Score Endpoint
 app.post('/submit-score', async (req, res) => {
-  const { username, score } = req.body;
+  const { username, score, secret } = req.body;
+
+  // 🚨 Validate secret key
+  if (secret !== process.env.SUBMIT_SECRET) {
+    return res.status(403).send('Forbidden: Invalid secret key');
+  }
 
   if (!username || typeof score !== 'number' || score < 0) {
     return res.status(400).send('Invalid request payload');
   }
 
   const scoreRef = db.collection('scores').doc(username);
-
+  
   try {
     const doc = await scoreRef.get();
+    
 
     if (!doc.exists) {
       await scoreRef.set({
